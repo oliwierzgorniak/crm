@@ -1,22 +1,23 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { ApiResponse } from "shared";
+import "dotenv/config";
+import { between } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { policiesTable } from "./db/schema";
+import dayjs from "dayjs";
 
-export const app = new Hono()
+const db = drizzle(process.env.DATABASE_URL!);
 
-.use(cors())
+export const app = new Hono().use(cors()).get("/currentPolicies", async (c) => {
+  const dateFrom = dayjs().startOf("month").toDate();
+  const dateTo = dayjs().endOf("month").toDate();
 
-.get("/", (c) => {
-	return c.text("Hello Hono!");
-})
+  const policies = await db
+    .select()
+    .from(policiesTable)
+    .where(between(policiesTable.deadline, dateFrom, dateTo));
 
-.get("/hello", async (c) => {
-	const data: ApiResponse = {
-		message: "Hello BHVR!",
-		success: true,
-	};
-
-	return c.json(data, { status: 200 });
+  return c.json(policies);
 });
 
 export default app;

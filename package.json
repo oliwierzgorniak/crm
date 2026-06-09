@@ -32,13 +32,19 @@
     "turbo"
   ],
   "devDependencies": {
+    "@types/pg": "^8.20.0",
     "bun-types": "latest",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.22.3",
     "turbo": "^2.6.3"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "hono": "^4.12.23"
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.23",
+    "pg": "^8.21.0"
   }
 }
